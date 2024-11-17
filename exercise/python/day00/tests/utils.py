@@ -2,18 +2,21 @@ import hashlib
 import os
 from base64 import b64encode
 
+from typing import Protocol
+
+class HashAlgo(Protocol):
+    def update(data: bytes) -> None: ...
+    def digest() -> bytes: ...
+
+def convert(data: str, strategie: HashAlgo) -> str:
+    strategie.update(data.encode('utf8'))
+    return b64encode(strategie.digest()).decode('utf8')
 
 def convert_key(key: str) -> str:
-    sha256 = hashlib.sha256()
-    sha256.update(key.encode('utf-8'))
-    return b64encode(sha256.digest()).decode('utf-8')
-
+    return convert(key, hashlib.sha256())
 
 def convert_iv(iv: str) -> str:
-    md5 = hashlib.md5()
-    md5.update(iv.encode('utf-8'))
-    return b64encode(md5.digest()).decode('utf-8')
-
+    return convert(iv, hashlib.md5())
 
 def load_file(filename):
     path = os.path.join(os.path.dirname(__file__), 'resources', filename)
