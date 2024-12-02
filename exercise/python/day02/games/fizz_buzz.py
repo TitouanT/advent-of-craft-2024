@@ -1,4 +1,9 @@
-from typing import Optional
+from typing import Optional, Protocol
+
+class FizzBuzzConfig(Protocol):
+    min: int
+    max: int
+    fizzy_stuff: list[tuple[int, str]]
 
 class Default_Fizz_Buzz_Config:
     min = 1
@@ -19,7 +24,7 @@ class Whiz_Bang_Config:
     ]
 
 class FizzBuzz:
-    def __init__(self, config=Default_Fizz_Buzz_Config):
+    def __init__(self, config: FizzBuzzConfig = Default_Fizz_Buzz_Config):
         self.config = config
 
     def convert(self, input: int) -> Optional[str]:
