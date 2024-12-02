@@ -1,7 +1,7 @@
 from communication.logger import Logger
 
 
-class TestLogger(Logger):
+class LoggerTest(Logger):
     def __init__(self):
         self.message = None
 
