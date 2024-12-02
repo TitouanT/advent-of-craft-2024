@@ -1,35 +1,41 @@
 from typing import Optional
 
-MIN = 1
-MAX = 100
-FIZZBUZZ = 15
-FIZZ = 3
-BUZZ = 5
+class Default_Fizz_Buzz_Config:
+    min = 1
+    max = 100
+    fizzy_stuff = [
+        (3, 'Fizz'),
+        (5, 'Buzz'),
+    ]
 
+class Whiz_Bang_Config:
+    min = 1
+    max = 100
+    fizzy_stuff = [
+        (3, 'Fizz'),
+        (5, 'Buzz'),
+        (7, 'Whizz'),
+        (9, 'Bang'),
+    ]
 
 class FizzBuzz:
-    @staticmethod
-    def convert(input: int) -> Optional[str]:
-        if FizzBuzz.is_out_of_range(input):
+    def __init__(self, config=Default_Fizz_Buzz_Config):
+        self.config = config
+
+    def convert(self, input: int) -> Optional[str]:
+        if self.is_out_of_range(input):
             return None
         else:
-            return FizzBuzz.convert_safely(input)
+            return self.convert_safely(input)
 
-    @staticmethod
-    def convert_safely(input: int) -> str:
-        if FizzBuzz.is_divisible_by(FIZZBUZZ, input):
-            return "FizzBuzz"
-        elif FizzBuzz.is_divisible_by(FIZZ, input):
-            return "Fizz"
-        elif FizzBuzz.is_divisible_by(BUZZ, input):
-            return "Buzz"
-        else:
-            return str(input)
+    def convert_safely(self, input: int) -> str:
+        matches = [name for divisor, name in sorted(self.config.fizzy_stuff) if FizzBuzz.is_divisible_by(divisor, input)]
+        return ''.join(matches) or str(input)
+
+    def is_out_of_range(self, input: int) -> bool:
+        return not self.config.min <= input <= self.config.max
 
     @staticmethod
     def is_divisible_by(divisor: int, input: int) -> bool:
         return input % divisor == 0
 
-    @staticmethod
-    def is_out_of_range(input: int) -> bool:
-        return input < MIN or input > MAX
